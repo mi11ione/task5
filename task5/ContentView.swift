@@ -8,17 +8,26 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
-}
+    @State private var position = CGPoint(x: 200, y: 120)
+    let colors: [Color] = [.white, .pink, .yellow, .black]
 
-#Preview {
-    ContentView()
+    var body: some View {
+        ZStack {
+            VStack(spacing: 0) {
+                ForEach(colors.indices, id: \.self) { id in
+                    Rectangle()
+                        .fill(colors[id])
+                        .frame(maxHeight: .infinity)
+                }
+            }
+
+            RoundedRectangle(cornerRadius: 20)
+                .fill(.white)
+                .blendMode(.difference)
+                .frame(width: 100, height: 100)
+                .position(x: position.x, y: position.y)
+                .gesture(DragGesture().onChanged { value in position = value.location })
+        }
+        .ignoresSafeArea()
+    }
 }
