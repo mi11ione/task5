@@ -9,24 +9,30 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var position = CGPoint(x: 200, y: 120)
-    let colors: [Color] = [.white, .pink, .yellow, .black]
 
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                ForEach(colors.indices, id: \.self) { id in
-                    Rectangle()
-                        .fill(colors[id])
-                        .frame(maxHeight: .infinity)
-                }
+                Color.black
+                Color.white
+                Color.black
+                Color.white
             }
 
-            RoundedRectangle(cornerRadius: 20)
-                .fill(.white)
-                .blendMode(.difference)
-                .frame(width: 100, height: 100)
-                .position(x: position.x, y: position.y)
-                .gesture(DragGesture().onChanged { value in position = value.location })
+            VStack(spacing: 0) {
+                Color.white
+                Color.pink
+                Color.yellow
+                Color.black
+            }
+            .overlay {
+                RoundedRectangle(cornerRadius: 20)
+                    .blendMode(.destinationOut)
+                    .frame(width: 100, height: 100)
+                    .position(x: position.x, y: position.y)
+            }
+            .compositingGroup()
+            .gesture(DragGesture().onChanged { value in position = value.location })
         }
         .ignoresSafeArea()
     }
