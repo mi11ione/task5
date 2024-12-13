@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.self) var environment
     @State private var position = CGPoint(x: 200, y: 120)
     private let colors = [Color.white, .pink, .yellow, .black]
 
     var body: some View {
         ZStack {
-            VStack(spacing: 0) { ForEach(colors.indices, id: \.self) { index in colors[index].contrast } }
+            VStack(spacing: 0) { ForEach(colors.indices, id: \.self) { index in colors[index].contrast(in: environment) } }
 
             VStack(spacing: 0) { ForEach(colors.indices, id: \.self) { index in colors[index] } }
                 .overlay {
@@ -30,13 +31,8 @@ struct ContentView: View {
 }
 
 extension Color {
-    var contrast: Color {
-        let uiColor = UIColor(self)
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-
-        uiColor.getRed(&red, green: &green, blue: &blue, alpha: nil)
-        return 0.2126 * red + 0.7152 * green + 0.0722 * blue < 0.5 ? .white : .black
+    func contrast(in environment: EnvironmentValues) -> Color {
+        let c = resolve(in: environment)
+        return 0.2126 * c.red + 0.7152 * c.green + 0.0722 * c.blue < 0.5 ? .white : .black
     }
 }
