@@ -9,15 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var position = CGPoint(x: 200, y: 120)
-
     private let colors = [Color.white, .pink, .yellow, .black]
-    private var rectColors: [Color] { colors.map(\.contrastColor) }
 
     var body: some View {
         ZStack {
-            VStack(spacing: 0) { ForEach(rectColors, id: \.self) { $0 } }
+            VStack(spacing: 0) { ForEach(colors.indices, id: \.self) { index in colors[index].contrast } }
 
-            VStack(spacing: 0) { ForEach(colors, id: \.self) { $0 } }
+            VStack(spacing: 0) { ForEach(colors.indices, id: \.self) { index in colors[index] } }
                 .overlay {
                     RoundedRectangle(cornerRadius: 20)
                         .blendMode(.destinationOut)
@@ -32,7 +30,7 @@ struct ContentView: View {
 }
 
 extension Color {
-    var contrastColor: Color {
+    var contrast: Color {
         let uiColor = UIColor(self)
         var red: CGFloat = 0
         var green: CGFloat = 0
