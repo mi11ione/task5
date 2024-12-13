@@ -11,13 +11,7 @@ struct ContentView: View {
     @State private var position = CGPoint(x: 200, y: 120)
 
     private let colors = [Color.white, .pink, .yellow, .black]
-    private var rectColors: [Color] {
-        colors.map { color in
-            let (r, g, b) = color.rgb
-            let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
-            return luminance < 0.8 ? .white : .black
-        }
-    }
+    private var rectColors: [Color] { colors.map(\.contrastColor) }
 
     var body: some View {
         ZStack {
@@ -38,12 +32,13 @@ struct ContentView: View {
 }
 
 extension Color {
-    var rgb: (red: Double, green: Double, blue: Double) {
+    var contrastColor: Color {
         let uiColor = UIColor(self)
         var red: CGFloat = 0
         var green: CGFloat = 0
         var blue: CGFloat = 0
+
         uiColor.getRed(&red, green: &green, blue: &blue, alpha: nil)
-        return (Double(red), Double(green), Double(blue))
+        return 0.2126 * red + 0.7152 * green + 0.0722 * blue < 0.5 ? .white : .black
     }
 }
